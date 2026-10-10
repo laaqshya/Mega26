@@ -1,0 +1,12 @@
+{
+  "name": "Raah — City Sign Reader",
+  "short_name": "Raah",
+  "description": "Read city signs and hear a plain-language explanation in your chosen language.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f8f3",
+  "theme_color": "#132f2b",
+  "icons": [
+    { "src": "/raah-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

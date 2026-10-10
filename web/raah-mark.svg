@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Raah mark">
+  <rect width="48" height="48" rx="16" fill="#173b35"/>
+  <path d="M13 35c7-1.4 11.7-5.3 14.8-12.4 2.1-4.8 4.3-7.7 8.2-9.6" fill="none" stroke="#d3ef98" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="m28.4 12.8 8.1-.1-.6 8.1" fill="none" stroke="#d3ef98" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="14" cy="35" r="3" fill="#d3ef98"/>
+</svg>

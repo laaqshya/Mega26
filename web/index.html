@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#132f2b" />
+    <meta name="description" content="Raah helps you read and understand city signs in the language you choose." />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/raah-mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>Raah — city signs, made clear</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main" data-i18n="skip">Skip to the main content</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Raah home">
+          <img src="/raah-mark.svg" alt="" width="42" height="42" />
+          <span class="brand-copy"><strong>raah</strong><small data-i18n="brandTag">Your way, made clear</small></span>
+        </a>
+        <div class="topbar-actions">
+          <span class="connection-pill" id="mode-pill"><span class="status-dot"></span><span id="mode-label" data-i18n="checking">Checking services</span></span>
+          <label class="language-control" for="response-language">
+            <span class="sr-only" data-i18n="responseLanguage">Response language</span>
+            <select id="response-language" aria-label="Response language">
+              <option value="en">English</option>
+              <option value="hi">हिन्दी</option>
+              <option value="te">తెలుగు</option>
+            </select>
+          </label>
+        </div>
+      </header>
+
+      <main id="main">
+        <section class="intro" aria-labelledby="page-title">
+          <div class="intro-copy">
+            <p class="eyebrow" data-i18n="eyebrow">A clearer way through the city</p>
+            <h1 id="page-title" data-i18n="headline">Know what the sign says.</h1>
+            <p class="intro-text" data-i18n="intro">Point, read, and hear a short explanation in your language. Raah tells you when a sign is hard to read.</p>
+          </div>
+          <div class="language-note" aria-live="polite">
+            <span class="language-note-icon" aria-hidden="true">Aa</span>
+            <span><strong data-i18n="languagesTitle">English · हिंदी · తెలుగు</strong><small data-i18n="languagesNote">Speech and captions in your chosen language</small></span>
+          </div>
+        </section>
+
+        <section class="workspace" aria-label="Sign reader">
+          <article class="panel capture-panel" aria-labelledby="capture-title">
+            <div class="panel-heading">
+              <div class="step-badge" aria-hidden="true">1</div>
+              <div><h2 id="capture-title" data-i18n="captureTitle">Capture a sign</h2><p data-i18n="captureHelp">Bus boards, platforms, exits, shop signs</p></div>
+            </div>
+
+            <div class="capture-stage" id="capture-stage">
+              <div class="capture-placeholder" id="capture-placeholder">
+                <div class="target-mark" aria-hidden="true"><span></span></div>
+                <strong data-i18n="cameraPrompt">Place the sign inside the frame</strong>
+                <span data-i18n="cameraHint">Keep the phone still and include all the text.</span>
+              </div>
+              <video id="camera-preview" class="media-preview is-hidden" autoplay muted playsinline aria-label="Live camera view"></video>
+              <img id="photo-preview" class="media-preview is-hidden" alt="Preview of the selected sign photo" />
+              <div class="preview-tag is-hidden" id="preview-tag" aria-live="polite"></div>
+            </div>
+            <canvas id="analysis-canvas" class="is-hidden" aria-hidden="true"></canvas>
+            <input id="photo-input" class="is-hidden" type="file" accept="image/jpeg,image/png,image/webp" capture="environment" aria-label="Choose or take a sign photo" />
+
+            <div class="capture-actions" id="capture-actions">
+              <button id="camera-button" class="button button-secondary" type="button"><span class="button-icon" aria-hidden="true">◉</span><span data-i18n="openCamera">Open camera</span></button>
+              <button id="photo-button" class="button button-quiet" type="button"><span class="button-icon" aria-hidden="true">＋</span><span data-i18n="choosePhoto">Choose photo</span></button>
+              <button id="voice-capture-button" class="button button-quiet" type="button"><span class="button-icon" aria-hidden="true">●</span><span data-i18n="voiceControl">Voice control</span></button>
+            </div>
+            <p class="voice-command-hint" data-i18n="voiceCommandHint">Tap Voice control and say “Read this sign” or ask a question.</p>
+            <div class="camera-live-actions is-hidden" id="camera-live-actions">
+              <button id="take-photo-button" class="button button-secondary" type="button"><span class="button-icon" aria-hidden="true">●</span><span data-i18n="takePhoto">Take photo</span></button>
+              <button id="close-camera-button" class="text-button" type="button" data-i18n="closeCamera">Close camera</button>
+            </div>
+
+            <div class="quality-box" id="quality-box" role="status" aria-live="polite">
+              <span class="quality-indicator" aria-hidden="true">i</span>
+              <span id="quality-message" data-i18n="qualityEmpty">A photo check will appear here before reading.</span>
+            </div>
+            <div class="warning-actions is-hidden" id="warning-actions">
+              <button class="button button-secondary" id="scan-anyway-button" type="button" data-i18n="scanAnyway">Try this photo anyway</button>
+              <button class="text-button" id="retake-button" type="button" data-i18n="retake">Retake photo</button>
+            </div>
+
+            <div class="capture-options">
+              <label class="field-label" for="scan-language" data-i18n="signLanguage">Language on the sign</label>
+              <select class="field-select" id="scan-language">
+                <option value="en">English</option><option value="hi">हिन्दी</option><option value="te">తెలుగు</option>
+              </select>
+              <label class="field-label" for="input-language" data-i18n="questionLanguage">Language for questions</label>
+              <select class="field-select" id="input-language" aria-label="Language for questions">
+                <option value="en">English</option><option value="hi">हिन्दी</option><option value="te">తెలుగు</option>
+              </select>
+            </div>
+            <button class="button button-primary scan-button" id="scan-button" type="button" disabled>
+              <span class="button-icon" aria-hidden="true">⌕</span><span data-i18n="readSign">Read this sign</span>
+            </button>
+            <p class="capture-footnote" data-i18n="noStorage">Your photo is sent for processing and is not saved by Raah.</p>
+          </article>
+
+          <article class="panel result-panel" aria-labelledby="result-title">
+            <div class="panel-heading">
+              <div class="step-badge step-badge-light" aria-hidden="true">2</div>
+              <div><h2 id="result-title" data-i18n="resultTitle">Hear and read</h2><p data-i18n="resultHelp">A short explanation, with the sign text for reference</p></div>
+            </div>
+
+            <div class="empty-result" id="empty-result">
+              <div class="sound-illustration" aria-hidden="true"><span class="sound-line"></span><span class="sound-line"></span><span class="sound-line"></span></div>
+              <h3 data-i18n="waitingTitle">Your sign will appear here</h3>
+              <p data-i18n="waitingText">Capture a sign to see its text, hear a plain-language explanation, and ask a follow-up question.</p>
+              <button class="sample-link" id="sample-button" type="button"><span aria-hidden="true">✳</span><span data-i18n="trySample">Try a sample sign</span><span aria-hidden="true">→</span></button>
+            </div>
+
+            <div class="answer-content is-hidden" id="answer-content" aria-live="polite" aria-atomic="false">
+              <div class="answer-meta"><span class="answer-tag" id="answer-tag" data-i18n="liveAnswer">Sign explanation</span><span class="confidence" id="confidence"></span></div>
+              <h3 class="answer-title" id="answer-title"></h3>
+              <p class="answer-text" id="answer-text"></p>
+              <div class="next-step is-hidden" id="next-step-wrap"><span class="next-step-icon" aria-hidden="true">↗</span><p id="next-step"></p></div>
+              <button class="speak-button" id="speak-button" type="button"><span class="speak-icon" aria-hidden="true">▶</span><span data-i18n="hearAgain">Hear this again</span></button>
+              <div class="evidence-card">
+                <div class="evidence-heading"><span data-i18n="signText">Text read from the sign</span><button type="button" id="toggle-evidence" class="evidence-toggle" aria-expanded="true" data-i18n="hideText">Hide</button></div>
+                <p id="evidence-text"></p>
+              </div>
+              <p id="answer-note" class="answer-note"></p>
+            </div>
+
+            <div class="followup is-hidden" id="followup">
+              <div class="followup-title"><span class="step-badge step-badge-small" aria-hidden="true">3</span><div><h3 data-i18n="followupTitle">Ask about this sign</h3><p data-i18n="followupHelp">Answers use only the text we just read.</p></div></div>
+              <div class="ask-row">
+                <label class="sr-only" for="question-input" data-i18n="questionLabel">Your question</label>
+                <input id="question-input" class="question-input" type="text" maxlength="500" autocomplete="off" placeholder="For example, which bus is listed?" data-i18n-placeholder="questionPlaceholder" />
+                <button id="ask-button" class="ask-button" type="button" aria-label="Ask question"><span aria-hidden="true">↑</span></button>
+              </div>
+              <div class="followup-tools">
+                <button class="voice-button" id="voice-button" type="button"><span class="mic-icon" aria-hidden="true">●</span><span id="voice-label" data-i18n="askByVoice">Ask by voice</span></button>
+                <span class="voice-hint" id="voice-hint" data-i18n="voiceHint">Tap once to start, again to finish</span>
+              </div>
+              <p class="transcript is-hidden" id="transcript" aria-live="polite"></p>
+            </div>
+
+            <div class="busy-indicator is-hidden" id="busy-indicator" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span><span id="busy-text" data-i18n="working">Reading the sign…</span></div>
+            <div class="error-message is-hidden" id="error-message" role="alert"><span aria-hidden="true">!</span><p id="error-text"></p><button id="error-dismiss" type="button" class="text-button" data-i18n="dismiss">Dismiss</button></div>
+          </article>
+        </section>
+
+        <section class="accessibility-bar" aria-label="Reading preferences">
+          <div class="accessibility-intro"><span class="accessibility-star" aria-hidden="true">✳</span><div><strong data-i18n="accessTitle">Made for different ways of moving</strong><small data-i18n="accessText">Speak, listen, or follow along with large captions.</small></div></div>
+          <div class="accessibility-controls">
+            <div class="text-size-controls" role="group" aria-label="Caption text size"><span data-i18n="textSize">Text size</span><button id="font-down" type="button" aria-label="Decrease text size">A−</button><button id="font-up" type="button" aria-label="Increase text size">A+</button></div>
+            <label class="speed-control" for="speech-speed"><span data-i18n="speechSpeed">Speech speed</span><input id="speech-speed" type="range" min="0.7" max="1.3" value="1" step="0.1" /><output id="speed-value">1×</output></label>
+          </div>
+        </section>
+
+        <details class="service-details" id="service-details">
+          <summary><span class="service-summary-icon" aria-hidden="true">⌘</span><span data-i18n="serviceTitle">Connected services</span><span class="service-summary-hint" data-i18n="serviceHint">Setup status</span></summary>
+          <div class="service-content">
+            <p data-i18n="serviceDescription">Keys stay on this server. Add your approved BHASHINI and Gemini credentials to the local .env file to enable live requests.</p>
+            <ul class="service-list" id="service-list" aria-live="polite"></ul>
+            <a class="docs-link" href="https://bhashini.gitbook.io/bhashini-apis" target="_blank" rel="noreferrer" data-i18n="bhashiniDocs">BHASHINI API onboarding and docs ↗</a>
+          </div>
+        </details>
+      </main>
+
+      <footer class="footer"><span>raah <span aria-hidden="true">·</span> <span data-i18n="footerText">Sign information, made easier to access.</span></span><span data-i18n="safetyNote">A sign reader, not a navigation or crossing safety system.</span></footer>
+      <div id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+    </div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
